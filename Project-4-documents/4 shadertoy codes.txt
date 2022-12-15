@@ -1,0 +1,19 @@
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+   float angle = iTime * 0.03;
+   vec2 normalizedCoord = fragCoord / iResolution.xy * 2.0 - 1.0;
+   for (float i = 0.0; i < 128.0; i += 1.0){
+   normalizedCoord = abs(normalizedCoord);
+   normalizedCoord -= 0.5;
+   normalizedCoord *= 1.03;
+   normalizedCoord *= mat2(
+   cos(angle), -sin(angle),
+   sin(angle), cos(angle)
+   );
+   }
+   
+   fragColor = vec4(length(normalizedCoord),
+   length(normalizedCoord + vec2(0.2, -0.3)),
+   length(normalizedCoord + vec2(-0.5, -0.1)),1.0);
+   
+}

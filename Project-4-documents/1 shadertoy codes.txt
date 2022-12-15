@@ -1,0 +1,29 @@
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // Normalized pixel coordinates (from 0 to 1)
+    vec2 uv = (fragCoord - .5 * iResolution.xy)/iResolution.y;
+    vec2 polarUV = vec2(atan(uv.x, uv.y),length(uv));
+
+    // Time varying pixel color
+    vec3 textureSample = texture(iChannel0, polarUV - (iTime * .3)).rgb;
+    
+    vec3 col = textureSample;
+    
+    vec3 maskedValue = vec3(1.2f, 1.0f, .8f) - (col);
+    
+    vec3 pole = vec3(0.15 * -iTime, 0.15 * -iTime, 0.15 * -iTime);
+
+
+    
+    vec3 uvw = vec3(uv.xy, pow(sqrt(uv.y*uv.y + uv.x*uv.x) * iTime, -sqrt(iTime)));
+    float r = distance(uvw, pole);
+
+ 
+    float theta = atan(uv.y - pole.y, uv.x - pole.x);
+
+   
+    vec2 p = vec2(2.0 * r * cos(theta), 2.0 * r * sin(theta));
+
+    // Output to screen
+    fragColor = vec4(maskedValue,1.0);
+}
